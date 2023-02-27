@@ -6,6 +6,8 @@
 #include "word_list.h"
 #include "pangrams.h"
 
+// so far I found: Bronx SQL whiz, fuck my JPEG advt.
+
 void find_pangrams(struct word_list_list* wllp, int min_len) {
     find_pangrams_impl(
         wllp,
