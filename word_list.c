@@ -51,6 +51,15 @@ void word_list_add(struct word_list* wlp, char* word) {
     char* word2 = malloc(strlen(word) + 1);
     strcpy(word2, word);
 
+    /* normalize to lowercase without punctuation */
+    for (char* p = word2; *p; p += 1) {
+        if (!isalpha(*p)) {
+            memmove(p, p + 1, strlen(p + 1) + 1);
+        } else {
+            *p = tolower(*p);
+        }
+    }
+
     int i = wlp->word_count;
     wlp->words[i] = word2;
     wlp->word_letter_bits[i] = bits;
@@ -82,19 +91,12 @@ int word_list_contains(struct word_list* wlp, char* word) {
 }
 
 int same_word(char* word1, char* word2) {
-    while (1) {
-        while (*word1 && !isalpha(*word1)) { word1 += 1; }
-        while (*word2 && !isalpha(*word2)) { word2 += 1; }
-        if (!word1 && !word2) { /* both words terminated */
+    while (*word1 == *word2) {
+        if (*word1 == '\0') {
             return 1;
-        }
-        if (!(word1 && word2)) { /* only one of the words terminated */
-            return 0;
-        }
-        if (tolower(*word1) != tolower(*word2)) {
-            return 0;
         }
         word1 += 1;
         word2 += 1;
     }
+    return 0;
 }
